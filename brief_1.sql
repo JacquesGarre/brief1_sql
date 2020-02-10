@@ -256,8 +256,23 @@ FROM vendeur2 GROUP BY PRODUCT_FAMILY,ITEM_PRICE;
 --en affichant pas les ventes complémentaires. 
 --    Toutefois les montants affectés à ces ventes doivent figurer dans la nouvelles table.
 
+-- 109
 
-CREATE TABLE vente_finale AS
+-- 127
+
+-- 67
+
+-- 68
+
+-- 94
+
+
+
+SELECT ID, CNT FROM (SELECT ID, COUNT(ID) AS CNT FROM client_0 GROUP BY ID) T1 WHERE CNT > 1;
+
+
+
+CREATE TABLE vente_finale3 AS
 SELECT
     ID,
     SHIPPING_MODE,
@@ -281,145 +296,83 @@ SELECT
     PRODUCT_TYPE,
     PRODUCT_FAMILY,
     CASE 
-        WHEN
-            SUBSTR(
-                CONCAT(
-                    SUM(
-                        CASE 
-                            WHEN INSTR(ITEM_PRICE, '<') = 1 OR INSTR(ITEM_PRICE, '>') = 1 THEN 0
-                            WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '<')-1)
-                            WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '>')-1)
-                            ELSE ITEM_PRICE
-                        END
-                    ),
-                    '<',
-                    SUM(
-                        CASE 
-                            WHEN INSTR(ITEM_PRICE, '<') = 1 OR INSTR(ITEM_PRICE, '>') = 1 THEN ITEM_PRICE
-                            WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '<')+1, LENGTH(ITEM_PRICE))
-                            WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '<')+1, LENGTH(ITEM_PRICE))
-                            ELSE ITEM_PRICE
-                        END
-                    )
+        WHEN 
+            INSTR(CONCAT(
+                SUM(
+                    CASE 
+                        WHEN INSTR(ITEM_PRICE, '<') = 1 OR INSTR(ITEM_PRICE, '>') = 1 THEN 0
+                        WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '<')-1)
+                        WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '>')-1)
+                        ELSE ITEM_PRICE
+                    END
                 ),
-                1,
-                INSTR(
-                    CONCAT(
-                        SUM(
-                            CASE 
-                                WHEN INSTR(ITEM_PRICE, '<') = 1 OR INSTR(ITEM_PRICE, '>') = 1 THEN 0
-                                WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '<')-1)
-                                WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '>')-1)
-                                ELSE ITEM_PRICE
-                            END
-                        ),
-                        '<',
-                        SUM(
-                            CASE 
-                                WHEN INSTR(ITEM_PRICE, '<') = 1 OR INSTR(ITEM_PRICE, '>') = 1 THEN ITEM_PRICE
-                                WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '<')+1, LENGTH(ITEM_PRICE))
-                                WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '<')+1, LENGTH(ITEM_PRICE))
-                                ELSE ITEM_PRICE
-                            END
-                        )
-                    ), 
-                    '<'
-                ) - 1
-            ) =
-            SUBSTR(
-                CONCAT(
-                    SUM(
-                        CASE 
-                            WHEN INSTR(ITEM_PRICE, '<') = 1 OR INSTR(ITEM_PRICE, '>') = 1 THEN 0
-                            WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '<')-1)
-                            WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '>')-1)
-                            ELSE ITEM_PRICE
-                        END
-                    ),
-                    '<',
-                    SUM(
-                        CASE 
-                            WHEN INSTR(ITEM_PRICE, '<') = 1 OR INSTR(ITEM_PRICE, '>') = 1 THEN ITEM_PRICE
-                            WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '<')+1, LENGTH(ITEM_PRICE))
-                            WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '<')+1, LENGTH(ITEM_PRICE))
-                            ELSE ITEM_PRICE
-                        END
-                    )
-                ),
-                INSTR(
-                    CONCAT(
-                        SUM(
-                            CASE 
-                                WHEN INSTR(ITEM_PRICE, '<') = 1 OR INSTR(ITEM_PRICE, '>') = 1 THEN 0
-                                WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '<')-1)
-                                WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '>')-1)
-                                ELSE ITEM_PRICE
-                            END
-                        ),
-                        '<',
-                        SUM(
-                            CASE 
-                                WHEN INSTR(ITEM_PRICE, '<') = 1 OR INSTR(ITEM_PRICE, '>') = 1 THEN ITEM_PRICE
-                                WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '<')+1, LENGTH(ITEM_PRICE))
-                                WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '<')+1, LENGTH(ITEM_PRICE))
-                                ELSE ITEM_PRICE
-                            END
-                        )
-                    ), 
-                    '<'
-                ) + 1,
-                LENGTH(
-                    CONCAT(
-                        SUM(
-                            CASE 
-                                WHEN INSTR(ITEM_PRICE, '<') = 1 OR INSTR(ITEM_PRICE, '>') = 1 THEN 0
-                                WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '<')-1)
-                                WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '>')-1)
-                                ELSE ITEM_PRICE
-                            END
-                        ),
-                        '<',
-                        SUM(
-                            CASE 
-                                WHEN INSTR(ITEM_PRICE, '<') = 1 OR INSTR(ITEM_PRICE, '>') = 1 THEN ITEM_PRICE
-                                WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '<')+1, LENGTH(ITEM_PRICE))
-                                WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '<')+1, LENGTH(ITEM_PRICE))
-                                ELSE ITEM_PRICE
-                            END
-                        )
-                    )
+                '<',
+                SUM(
+                    CASE 
+                        WHEN INSTR(ITEM_PRICE, '<') = 1 THEN SUBSTR(ITEM_PRICE, 2, LENGTH(ITEM_PRICE))
+                        WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '<')+1, LENGTH(ITEM_PRICE))
+                        WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '>')+1, LENGTH(ITEM_PRICE))
+                        ELSE ITEM_PRICE
+                    END
                 )
-                
-            )
+            ), '0') = 1
         THEN
-            SUM(
-                CASE 
-                    WHEN INSTR(ITEM_PRICE, '<') = 1 OR INSTR(ITEM_PRICE, '>') = 1 THEN 0
-                    WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '<')-1)
-                    WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '>')-1)
-                    ELSE ITEM_PRICE
-                END
-            )
+            SUBSTR(CONCAT(
+                SUM(
+                    CASE 
+                        WHEN INSTR(ITEM_PRICE, '<') = 1 OR INSTR(ITEM_PRICE, '>') = 1 THEN 0
+                        WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '<')-1)
+                        WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '>')-1)
+                        ELSE ITEM_PRICE
+                    END
+                ),
+                '<',
+                SUM(
+                    CASE 
+                        WHEN INSTR(ITEM_PRICE, '<') = 1 THEN SUBSTR(ITEM_PRICE, 2, LENGTH(ITEM_PRICE))
+                        WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '<')+1, LENGTH(ITEM_PRICE))
+                        WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '>')+1, LENGTH(ITEM_PRICE))
+                        ELSE ITEM_PRICE
+                    END
+                )
+            ), 2, LENGTH(ITEM_PRICE))
         ELSE
             CONCAT(
-                    SUM(
-                        CASE 
-                            WHEN INSTR(ITEM_PRICE, '<') = 1 OR INSTR(ITEM_PRICE, '>') = 1 THEN 0
-                            WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '<')-1)
-                            WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '>')-1)
-                            ELSE ITEM_PRICE
-                        END
-                    ),
-                    '<',
-                    SUM(
-                        CASE 
-                            WHEN INSTR(ITEM_PRICE, '<') = 1 OR INSTR(ITEM_PRICE, '>') = 1 THEN ITEM_PRICE
-                            WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '<')+1, LENGTH(ITEM_PRICE))
-                            WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '<')+1, LENGTH(ITEM_PRICE))
-                            ELSE ITEM_PRICE
-                        END
-                    )
+                SUM(
+                    CASE 
+                        WHEN INSTR(ITEM_PRICE, '<') = 1 OR INSTR(ITEM_PRICE, '>') = 1 THEN 0
+                        WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '<')-1)
+                        WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, 1, INSTR(ITEM_PRICE, '>')-1)
+                        ELSE ITEM_PRICE
+                    END
+                ),
+                '<',
+                SUM(
+                    CASE 
+                        WHEN INSTR(ITEM_PRICE, '<') = 1 THEN SUBSTR(ITEM_PRICE, 2, LENGTH(ITEM_PRICE))
+                        WHEN INSTR(ITEM_PRICE, '<') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '<')+1, LENGTH(ITEM_PRICE))
+                        WHEN INSTR(ITEM_PRICE, '>') > 1 THEN SUBSTR(ITEM_PRICE, INSTR(ITEM_PRICE, '>')+1, LENGTH(ITEM_PRICE))
+                        ELSE ITEM_PRICE
+                    END
                 )
-        END AS ITEM_PRICE,
+            )
+        END
+    AS ITEM_PRICE,
     _KEY
 FROM client_0 GROUP BY ID;
+
+
+
+
+-- AFTER READING THIS
+--     _____
+--    [IIIII]
+--     )"""(
+--    /     \
+--   /       \
+--   |`-...-'|
+--   |aspirin|
+-- _ |`-...-'j    _
+-- (\)`-.___.(I) _(/)
+--   (I)  (/)(I)(\)
+--     (I)        

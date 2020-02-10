@@ -297,7 +297,7 @@ FROM vendeur2 GROUP BY PRODUCT_FAMILY,ITEM_PRICE;
 --en affichant pas les ventes complémentaires. 
 --    Toutefois les montants affectés à ces ventes doivent figurer dans la nouvelles table.
 
-CREATE TABLE vente_finale3 AS
+CREATE TABLE vente_finale AS
 SELECT
     ID,
     SHIPPING_MODE,

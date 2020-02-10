@@ -202,9 +202,9 @@ FROM
         WHERE 
         DAYOFWEEK(
             CONCAT(
-                SUBSTR(BUYING_DATE, INSTR(BUYING_DATE, '-')+1, LENGTH(BUYING_DATE)), 
+                SUBSTR(BUYING_DATE, INSTR(BUYING_DATE, '-')+1, LENGTH(BUYING_DATE)), -- année
                 '-', 
-                CASE SUBSTR(BUYING_DATE, 1, INSTR(BUYING_DATE, '-')-1) 
+                CASE SUBSTR(BUYING_DATE, 1, INSTR(BUYING_DATE, '-')-1) -- mois
                     WHEN 'janv' THEN '01'
                     WHEN 'févr' THEN '02'
                     WHEN 'mars' THEN '03'
@@ -218,7 +218,7 @@ FROM
                     WHEN 'nov' THEN '11'
                     WHEN 'dec' THEN '12'
                 END,
-                '-01'
+                '-01' -- jour
             ) 
         ) = 2 -- 2 pour Lundi
         AND SELLER_SCORE_COUNT LIKE '%100000<1000000%'
